@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GameStatus {
+  CREATED
+  PLAYING
+  FINISHED
+}
+
+model Image {
+    id              Int             @id @default(autoincrement())
+    slug            String
+    title           String
+    url             String
+    nautralWidth    Int
+    naturalHeight   Int
+    createdAt       DateTime        @default(now())
+    characters      Character[]
+    sessions        GameSession[]
+    scores          Score[]
+}
+
+model Character {
+    id              Int             @id @default(autoincrement())
+    imageId         Int         
+    image           Image           @relation(fields: [imageId], references: [id], onDelete: Cascade)
+    name            String
+    iconrUrl        String?
+    xMin            Float
+    xMax            Float
+    yMin            Float
+    yMax            Float
+    found           Found[]
+    @@unique([imageId, name])
+    @@index([imageId])
+}
+
+model GameSession{
+    id              String              @id @default(uuid())
+    image           Image               @relation(fields: [imageId], references: [id])
+    imageId         Int
+    status          GameStatus          @default(CREATED)
+    createdAt       DateTime            @default(now())
+    startedAt       DateTime?
+    finishedAt      DateTime?
+    durationMe      Int?
+    found           Found[]
+    score           Score?
+}
+
+model Found {
+    sessionId       String
+    session         GameSession         @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+    characterId     Int
+    character       Character           @relation(fields: [characterId], references: [id])
+    foundAt         DateTime            @default(now())
+    @@id([sessionId, characterId])
+}
+
+model Score {
+    id              Int                 @id @default(autoincrement())
+    sessionId       String              @unique
+    session         GameSession         @relation(fields: [sessionId], references: [id])
+    imageId         Int
+    image           Image               @relation(fields: [imageId], references: [id])
+    playerName      String
+    durationMs      Int
+    createdAt       DateTime            @default(now())
+    @@index([imageId, durationMs, createdAt])
+}
