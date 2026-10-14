@@ -6,13 +6,20 @@ async function populate (){
             slug: "chaos",
             title: "Wind Party",
             url: "/image1.jpg",
-            nautralWidth: 1024,
+            naturalWidth: 1024,
             naturalHeight: 1024,
             characters: {
-                name: "Waldo", iconUrl: "/",
-                xMin: 0.607, xMax: 0.639,
-                yMin: 0.543, yMax: 0.586
+                create: {
+                    name: "Waldo", iconUrl: "/",
+                    xMin: 0.607, xMax: 0.639,
+                    yMin: 0.543, yMax: 0.586
+                }  
             }
         }
     });
 }
+
+populate()
+    .then(() => console.log("Seeded successfully!"))
+    .catch((e) => console.error("Error:", e))
+    .finally(async () => await prisma.$disconnect());

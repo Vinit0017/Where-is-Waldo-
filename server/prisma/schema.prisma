@@ -19,7 +19,7 @@ model Image {
     slug            String
     title           String
     url             String
-    nautralWidth    Int
+    naturalWidth    Int
     naturalHeight   Int
     createdAt       DateTime        @default(now())
     characters      Character[]
@@ -32,7 +32,7 @@ model Character {
     imageId         Int         
     image           Image           @relation(fields: [imageId], references: [id], onDelete: Cascade)
     name            String
-    iconrUrl        String?
+    iconUrl        String?
     xMin            Float
     xMax            Float
     yMin            Float

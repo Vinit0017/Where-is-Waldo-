@@ -1,6 +1,6 @@
 const express = require("express");
-const apiRouter = require("./routes/apiRouter");
-const errorHandler = require("./middlewares/errors");
+const apiRouter = require("./routes/images.routes");
+const errorHandler = require("./middlewares/errorHandler");
 const app = express();
 
 app.use(express.json());
@@ -16,5 +16,5 @@ app.use(errorHandler);
 const PORT = 8080;
 app.listen(PORT, err =>{
     if(err)throw err;
-    console.log(`Express listenign on port: ${PORT}`);
+    console.log(`Express listening on port: ${PORT}`);
 });

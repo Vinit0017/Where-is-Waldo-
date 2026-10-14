@@ -3,7 +3,7 @@ const {
     PrismaClientValidationError,
 } = require("../generated/prisma");
 
-export default function errorHandler(err, req, res, next){
+function errorHandler(err, req, res, next){
     console.log(err);
 
     if(err instanceof PrismaClientValidationError){
@@ -24,4 +24,6 @@ export default function errorHandler(err, req, res, next){
             message: err.message || "Internal Server Error. Please try again later."
         }
     });
-}
+};
+
+module.exports = errorHandler;
