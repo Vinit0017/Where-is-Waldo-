@@ -1,11 +1,16 @@
+require("dotenv").config();
 const express = require("express");
-const apiRouter = require("./routes/images.routes");
+const imageRouter = require("./routes/images.routes");
+const gameRouter = require("./routes/games.routes");
 const errorHandler = require("./middlewares/errorHandler");
 const app = express();
 
+app.use(express.urlencoded());
+
 app.use(express.json());
 
-app.use("/api", apiRouter);
+app.use("/api", gameRouter);
+app.use("/api", imageRouter);
 
 app.use((req, res, next) =>{
     res.status(404).send("Page not found!");
@@ -13,7 +18,7 @@ app.use((req, res, next) =>{
 
 app.use(errorHandler);
 
-const PORT = 8080;
+const PORT = 8070;
 app.listen(PORT, err =>{
     if(err)throw err;
     console.log(`Express listening on port: ${PORT}`);

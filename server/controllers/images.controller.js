@@ -1,10 +1,11 @@
+const { BOX_WIDTH } = require("../config/dataset");
 const imageQueries = require("../db/images.db");
 const CustomError = require("../middlewares/customErrors");
 
 exports.allImages = async(req, res, next) =>{
     try{
         const dbImages= await imageQueries.getAllImages();
-        if(dbImages.length === 0) throw new CustomError("No valid images found.", 404, "IMAGE_NOT_FOUND.");
+        if(dbImages.length === 0) throw new CustomError("No valid images found.", 404, "IMAGES_NOT_FOUND.");
 
         const formattedResponse = {
             images: dbImages.map((img) =>({
@@ -33,7 +34,7 @@ exports.imageMetaData = async(req, res, next) =>{
         if(Number.isNaN(imageId)) throw new CustomError("Invalid image.", 404, "INVALID_IMAGE_ID");
 
         const imageData = await imageQueries.getImageDataById(imageId);
-        if(!imageData) throw new CustomError("Invalid image id.", 404, "IMAGE_ID_NOT_FOUND");
+        if(!imageData) throw new CustomError("Invalid image id.", 404, "IMAGE_NOT_FOUND");
 
         const formattedResponse = {
             id: imageData.id,
@@ -41,7 +42,7 @@ exports.imageMetaData = async(req, res, next) =>{
             url: imageData.url,
             naturalWidth: imageData.naturalWidth,
             naturalHeight: imageData.naturalHeight,
-            targetBoxWidth: 0.06,
+            targetBoxWidth: BOX_WIDTH,
             characters: imageData.characters.map((char) => ({
                 id: char.id,
                 name: char.name,

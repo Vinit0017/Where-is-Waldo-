@@ -32,7 +32,7 @@ model Character {
     imageId         Int         
     image           Image           @relation(fields: [imageId], references: [id], onDelete: Cascade)
     name            String
-    iconUrl        String?
+    iconUrl         String?
     xMin            Float
     xMax            Float
     yMin            Float
@@ -50,7 +50,7 @@ model GameSession{
     createdAt       DateTime            @default(now())
     startedAt       DateTime?
     finishedAt      DateTime?
-    durationMe      Int?
+    durationMs      Int?
     found           Found[]
     score           Score?
 }
