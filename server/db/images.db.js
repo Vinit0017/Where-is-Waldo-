@@ -34,4 +34,4 @@ exports.getImageDataById = async(imageId) =>{
             },
         },
     });
-}
+};

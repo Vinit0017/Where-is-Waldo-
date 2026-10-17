@@ -31,7 +31,7 @@ exports.allImages = async(req, res, next) =>{
 exports.imageMetaData = async(req, res, next) =>{
     try{
         const imageId = Number(req.params.imageId);
-        if(Number.isNaN(imageId)) throw new CustomError("Invalid image.", 404, "INVALID_IMAGE_ID");
+        if(!Number.isInteger(imageId)) throw new CustomError("Invalid image.", 404, "INVALID_IMAGE_ID");
 
         const imageData = await imageQueries.getImageDataById(imageId);
         if(!imageData) throw new CustomError("Invalid image id.", 404, "IMAGE_NOT_FOUND");
