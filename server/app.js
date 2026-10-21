@@ -7,9 +7,10 @@ const errorHandler = require("./middlewares/errorHandler");
 const cors = require("cors");
 const app = express();
 
-app.use(cors({origin: "http://localhost:5173"}));
+app.set("trust proxy", 1);
+app.use(cors({origin: process.env.FRONTEND_ORIGIN || "http://localhost:5173"}));
 
-app.use(express.urlencoded());
+app.use(express.urlencoded({extended: true}));
 
 app.use(express.json());
 
@@ -23,7 +24,7 @@ app.use((req, res, next) =>{
 
 app.use(errorHandler);
 
-const PORT = 8070;
+const PORT = process.env.PORT || 8070;
 app.listen(PORT, err =>{
     if(err)throw err;
     console.log(`Express listening on port: ${PORT}`);
