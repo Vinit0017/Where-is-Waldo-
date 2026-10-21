@@ -1,69 +1,54 @@
-import { useEffect, useState } from 'react';
-import './App.css';
-import Photoboard from './components/PhotoBoard';
-import { Character } from './db/seed';
+import { useCallback, useState } from "react";
+import "./App.css";
+import { api } from "./api/api";
+import ImageSelect from "./components/ImageSelect";
+import Game from "./components/Game";
 
-const image = {
-  url: '/image1.jpg',
-  naturalWidth: 1024,
-  naturalHeight: 1024,
-  targetBoxWidth: 0.06,
-};
+const KEY = "waldo.session";
 
-function hitTest(c, point) {
-  const boxW = image.targetBoxWidth;
-  const boxH = boxW * (image.naturalWidth / image.naturalHeight);
-  return (
-    point.x - boxW / 2 < c.xMax && point.x + boxW / 2 > c.xMin &&
-    point.y - boxH / 2 < c.yMax && point.y + boxH / 2 > c.yMin
-  );
+function loadSession() {
+  try {
+    return JSON.parse(localStorage.getItem(KEY));
+  } catch {
+    return null;
+  }
 }
 
-function App() {
-  const [found, setFound] = useState([]);
-  const [message, setMessage] = useState(null);
+export default function App() {
+  const [session, setSession] = useState(loadSession); // { gameId, imageId }
+  const [error, setError] = useState(null);
+  const [starting, setStarting] = useState(false);
 
-  const characters = Character;
-  const foundIds = found.map((f) => f.id);
-  const remaining = characters.filter((c) => !foundIds.includes(c.id));
-  const allFound = remaining.length === 0;
-
-  useEffect(() => {
-    if (!message) return;
-    const t = setTimeout(() => setMessage(null), 2500);
-    return () => clearTimeout(t);
-  }, [message]);
-
-  function handlePick(character, point) {
-    if (foundIds.includes(character.id)) return;
-    if (hitTest(character, point)) {
-      setFound((prev) => [...prev, character]);
-      setMessage({ text: `You found ${character.name}!`, kind: 'good' });
-    } else {
-      setMessage({ text: `That's not ${character.name}!`, kind: 'bad' });
+  async function startNew(imageId) {
+    setError(null);
+    setStarting(true);
+    try {
+      const game = await api.createGame(imageId);
+      await api.startGame(game.gameId);
+      const s = { gameId: game.gameId, imageId };
+      localStorage.setItem(KEY, JSON.stringify(s));
+      setSession(s);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setStarting(false);
     }
   }
 
+ const exit = useCallback(() =>{
+    localStorage.removeItem(KEY);
+    setSession(null);
+ }, []);
+
   return (
-    <div>
-      <header>
-        <strong>Find: </strong>
-        {characters.map((c) => (
-          <span key={c.id}>{c.name} </span>
-        ))}
-        {allFound && <strong>All found!</strong>}
-      </header>
-
-      <Photoboard
-        image={image}
-        remaining={remaining}
-        found={found}
-        onPick={handlePick}
-      />
-
-      {message && <div className={message.kind}>{message.text}</div>}
+    <div className="app">
+      <h1>Where's Waldo?</h1>
+      {error && <p className="msg bad">{error}</p>}
+      {session ? (
+        <Game key={session.gameId} {...session} onExit={exit} />
+      ) : (
+        <ImageSelect onPick={startNew} disabled={starting} />
+      )}
     </div>
   );
 }
-
-export default App;

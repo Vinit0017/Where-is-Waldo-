@@ -1,0 +1,33 @@
+.app { max-width: 1100px; margin: 0 auto; padding: 1rem; font-family: system-ui, sans-serif; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+.card { display: flex; flex-direction: column; gap: .4rem; padding: .6rem; text-align: left; cursor: pointer; }
+.card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: .6rem; }
+.chip { display: inline-flex; align-items: center; gap: .3rem; margin-right: .5rem; padding: 2px 8px; border: 1px solid #888; border-radius: 999px; }
+.chip img { width: 20px; height: 20px; border-radius: 50%; }
+.chip.done { text-decoration: line-through; opacity: .5; }
+.timer { font-variant-numeric: tabular-nums; font-size: 1.3rem; font-weight: 600; }
+
+.msg { padding: .5rem .8rem; border-radius: 6px; margin: .5rem 0; }
+.msg.good { background: #d9f7e3; color: #115c2c; }
+.msg.bad { background: #fde2e2; color: #8a1c1c; }
+
+/* wrapper hugs the image so click math and overlays line up */
+.board { position: relative; display: inline-block; line-height: 0; cursor: crosshair; max-width: 100%; }
+.board > img { display: block; max-width: 100%; height: auto; user-select: none; }
+
+.found-ring { position: absolute; transform: translate(-50%, -50%); border: 3px solid limegreen; border-radius: 50%; pointer-events: none; }
+
+.target { position: absolute; transform: translate(-50%, -50%); border: 2px dashed red; border-radius: 50%; line-height: normal; }
+.menu { position: absolute; top: 0; left: 100%; margin: 0 0 0 6px; padding: 4px; list-style: none; background: #fff; border: 1px solid #888; border-radius: 6px; white-space: nowrap; z-index: 5; }
+.menu.left { left: auto; right: 100%; margin: 0 6px 0 0; }
+.menu button { display: block; width: 100%; text-align: left; cursor: pointer; }
+
+.overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, .55); display: grid; place-items: center; z-index: 10; }
+.dialog { background: #fff; color: #111; padding: 1.5rem; border-radius: 10px; width: min(420px, 92vw); max-height: 90vh; overflow: auto; display: flex; flex-direction: column; gap: .6rem; }
+.dialog input { padding: .5rem; margin-right: .4rem; }
+.leaderboard { padding: 0; list-style: none; margin: 0; }
+.leaderboard li { display: grid; grid-template-columns: 3rem 1fr auto; padding: 4px 6px; border-bottom: 1px solid #eee; }
+.leaderboard li.me { background: #fff6c2; font-weight: 600; }
