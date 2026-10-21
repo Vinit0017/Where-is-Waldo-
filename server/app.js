@@ -4,7 +4,10 @@ const imageRouter = require("./routes/images.routes");
 const gameRouter = require("./routes/games.routes");
 const scoreRouter = require("./routes/scores.routers");
 const errorHandler = require("./middlewares/errorHandler");
+const cors = require("cors");
 const app = express();
+
+app.use(cors({origin: "http://localhost:5173"}));
 
 app.use(express.urlencoded());
 

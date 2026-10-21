@@ -16,7 +16,7 @@ enum GameStatus {
 
 model Image {
     id              Int             @id @default(autoincrement())
-    slug            String
+    slug            String          @unique
     title           String
     url             String
     naturalWidth    Int

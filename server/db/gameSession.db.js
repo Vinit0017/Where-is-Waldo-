@@ -19,9 +19,12 @@ exports.findGame = async(gameId) =>{
         where: {id: gameId},
         select: {
             id: true,
+            imageId: true,
             image: {
                 select: {
                     id: true,
+                    naturalHeight: true,
+                    naturalWidth: true,
                     _count:{
                         select: {
                             characters: true,
@@ -52,7 +55,7 @@ exports.findGame = async(gameId) =>{
 };
 
 exports.setGameStatus = async (newStatus, gameId) =>{
-    return prisma.gameSession.findUnique({
+    return prisma.gameSession.update({
         where: {id: gameId},
         data: {status: newStatus},
 
@@ -69,10 +72,6 @@ exports.setGameStart = async (gameId) => {
         data:{
             startedAt: new Date(),
             status: "PLAYING",
-            durationMs: 0,
-            found: {
-                set: [],
-            },
         },
         select: {
             id: true,
@@ -82,7 +81,7 @@ exports.setGameStart = async (gameId) => {
     });
 };
 
-exports.finishGame = async (gameId, finishedAt, durationMs, db=primsa) => {
+exports.finishGame = async (gameId, finishedAt, durationMs, db=prisma) => {
     const {count} = await db.gameSession.updateMany({
         where: {
             id: gameId,
