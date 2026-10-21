@@ -49,7 +49,7 @@ Where-is-Waldo-/
   frontend/
     public/            photos and character icons (served from the site root)
     src/
-      api.js           fetch wrapper and time formatting
+      api/api.js           fetch wrapper and time formatting
       App.jsx          game session handling
       components/
         ImageSelect.jsx
@@ -57,11 +57,12 @@ Where-is-Waldo-/
         Finish.jsx     score form and leaderboard
   server/
     app.js             Express setup
+    config/            configs for used stacks
     routes/            games, images, scores
     controllers/       request handling
     db/                Prisma queries
     middlewares/       validation, error handling, rate limiter
-    services/          hit test and pagination
+    services/          hit test
     prisma/            schema, migrations, seed
 ```
 
@@ -91,7 +92,7 @@ Errors share one shape:
 **Requirements:** Node.js 18 or newer and a PostgreSQL database.
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Vinit0017/Where-is-Waldo-/
 cd Where-is-Waldo-
 ```
 
